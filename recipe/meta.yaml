@@ -25,7 +25,6 @@ requirements:
 
 test:
   source_files:
-    - pyproject.toml
     - tests
   imports:
     - textdistance
