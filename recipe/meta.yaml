@@ -1,31 +1,41 @@
 {% set name = "textdistance" %}
-{% set version = "4.2.1" %}
-{% set sha256 = "46f8df3b26c7f319ab500b417047f61b85c2dd221781cb02f6c9136e5f1c9284" %}
+{% set version = "4.6.3" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: d6dabc50b4ea832cdcf0e1e6021bd0c7fcd9ade155888d79bb6a3c31fce2dc6f
 
 build:
-  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
   host:
-    - python >=2.7
+    - python
     - pip
+    - wheel
   run:
-    - python >=2.7
+    - python
+  run_constrained:
+    - rapidfuzz>=2.6.0
 
 test:
+  source_files:
+    - tests
   imports:
     - textdistance
+  commands:
+    - pip check
+    - pytest -v tests/test_common.py
+  requires:
+    - pip
+    - pytest
+    - hypothesis
+    - numpy
 
 about:
   home: https://github.com/orsinium/textdistance
